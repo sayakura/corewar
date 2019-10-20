@@ -5,11 +5,9 @@ void        p_process_loop()
 {
     t_process *p;
 
-    while (*p)
+    p = CORE.process;
+    while (p)
     {
-
-
-
         p = p->next;
     }    
 }
@@ -17,6 +15,7 @@ void        p_process_loop()
 void        p_fork(uint8_t *pc, int32_t id, bool before)
 {
     t_process *p;
+    t_process *tmp;
 
     p = malloc(sizeof(t_process));
     bzero(&p->state, sizeof(t_cpu));
@@ -30,5 +29,15 @@ void        p_fork(uint8_t *pc, int32_t id, bool before)
         CORE.process = p;
     }
     else 
-        CORE.process->next = p;
+    {
+        tmp = CORE.process;
+        if (!tmp)
+            CORE.process = p;
+        else
+        {
+            while (tmp->next)
+                tmp = tmp->next;
+            tmp->next = p;
+        }
+    }
 }

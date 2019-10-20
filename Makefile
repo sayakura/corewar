@@ -1,5 +1,9 @@
+SRC = *.c
 
+FILES = $(addprefix src/, $(SRC))
 
 all:
-	gcc -Wall -Werror -Wextra *.c
-	
+	gcc -g -Iinclude -Wall -Werror -Wextra -fsanitize=address $(FILES)
+
+# test:
+# 	gcc -g -Iinclude -Wall -Werror -Wextra -fsanitize=address 
