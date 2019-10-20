@@ -1,0 +1,4 @@
+*.s
+*.cor 
+a.out
+.vscode
