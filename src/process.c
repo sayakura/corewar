@@ -23,6 +23,7 @@ void        p_fork(uint8_t *pc, int32_t id, bool before)
     p->state.pc = pc;
     p->champ_id = id;
     p->next = NULL;
+    CORE.nprocess++;
     if (before)
     {
         p->next = CORE.process;

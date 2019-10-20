@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include <math.h>
 
 // #define MEM_SIZE (4*1024)
 // #define REG_NUMBER 16
@@ -74,10 +74,11 @@ typedef struct      s_cw
 	uint32_t		dump_cycle;
 	uint32_t 		kill_cycle;
 	t_process		*process;
+	uint32_t		nprocess;
 	t_champ			champions[MAX_PLAYERS];
 	uint8_t			ownership[MEM_SIZE];
     uint8_t         nplayers;
-	int32_t			ctd;
+	int32_t			cycle_to_die;
 	uint32_t		nbr_live_called;
 	uint32_t		checks;
 	uint32_t		flags;
@@ -133,6 +134,14 @@ void    h_rev_bytes(void *ptr, size_t n);
 
 void        p_fork(uint8_t *pc, int32_t id, bool before);
 void        p_process_loop();
+
+
+void    cw_start();
+
+
+void	ft_putchar(char c);
+void	h_puthex(unsigned char c);
+
 /*
 TODO:
 using acb as key to dispatch work to different handlers

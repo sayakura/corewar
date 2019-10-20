@@ -45,8 +45,6 @@ int     main(int ac, char **av)
 {
     read_args(ac, av);
     ch_champ_intro();
-    p_process_loop();
-
-    //load_champs(ac, av, fds);
+    cw_start();
     return (0);
 }
