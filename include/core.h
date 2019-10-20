@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <limits.h>
 
 // #define MEM_SIZE (4*1024)
 // #define REG_NUMBER 16
@@ -27,6 +28,7 @@ typedef struct s_process
 {
     t_cpu 				state;
     int32_t      		champ_id;
+	uint32_t			last_live;
 	struct s_process	*next;
 }               t_process;
 
@@ -78,7 +80,7 @@ typedef struct      s_cw
 	t_champ			champions[MAX_PLAYERS];
 	uint8_t			ownership[MEM_SIZE];
     uint8_t         nplayers;
-	int32_t			cycle_to_die;
+	uint32_t		cycle_to_die;
 	uint32_t		nbr_live_called;
 	uint32_t		checks;
 	uint32_t		flags;

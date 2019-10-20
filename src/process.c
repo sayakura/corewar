@@ -18,7 +18,7 @@ void        p_fork(uint8_t *pc, int32_t id, bool before)
     t_process *tmp;
 
     p = malloc(sizeof(t_process));
-    bzero(&p->state, sizeof(t_cpu));
+    bzero(p, sizeof(t_process));
     p->state.registers[1] = id;
     p->state.pc = pc;
     p->champ_id = id;

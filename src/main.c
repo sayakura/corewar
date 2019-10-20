@@ -18,6 +18,7 @@ void    read_args(int ac, char **av)
     int32_t         i;
 
     i = 0;
+    CORE.dump_cycle = UINT_MAX;
     while (av[++i])
     {
         if (!strcmp("-v", av[i]))

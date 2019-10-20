@@ -82,6 +82,8 @@ void    ch_load_champ(int fd, uint32_t id, bool assign)
 
     ch_parse_champ_header(&hdr, fd);
     CORE.nplayers++;
+    if (CORE.nplayers > 4)
+        FATAL("Too many champions\n");
     champ = &(CORE.champions[index]);
 	bzero(champ, sizeof(t_champ));
     memcpy(champ->name, hdr.prog_name, PROG_NAME_LENGTH);
