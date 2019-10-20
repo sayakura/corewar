@@ -32,7 +32,7 @@ void    read_args(int ac, char **av)
         }
         else if (!strcmp("-n", av[i]))
         {
-            if (i + 1 < ac)
+            if (i + 2 < ac)
                 load_champ(atoi(av[i + 1]), av[i + 2], true);
             i += 2;
         }
@@ -45,6 +45,8 @@ int     main(int ac, char **av)
 {
     read_args(ac, av);
     ch_champ_intro();
+    p_process_loop();
+
     //load_champs(ac, av, fds);
     return (0);
 }

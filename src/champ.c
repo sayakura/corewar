@@ -12,13 +12,6 @@
 
 #include "core.h"
 
-// /**
-//  *  search through process list, find 
-//  *  the champion with the specific id and return 
-//  *  it 
-//  * 
-//  * @param {int32_t} id - targeted champion's id
-//  */
 t_champ *ch_search_champion(int32_t id)
 {
     uint32_t     i;
@@ -33,15 +26,6 @@ t_champ *ch_search_champion(int32_t id)
     return (NULL);
 }
 
-/**
- *  parse the champion header into t_hdr
- *  the magic is in little endianess format
- * 
- * @param {t_hdr} hdr - current vm structure
- * @param {int} fd - file descriptor of the file where the
- *      champion is stored
- * 
- */
 void    ch_parse_champ_header(t_hdr *hdr, int fd)
 {
     off_t   siz;
@@ -81,15 +65,13 @@ void    ch_champ_intro()
     while (idx < CORE.nplayers)
     {
         champ = &CORE.champions[idx];
-        LOG("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",  champ->id, 
+        LOG("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",  champ->id
+            < 0 ? -champ->id : champ->id , 
             champ->prog_size, champ->name, champ->comment);
         idx++;
     }
 }
 
-/**
- * 
- */
 void    ch_load_champ(int fd, uint32_t id, bool assign)
 {
     t_hdr               hdr;
@@ -101,7 +83,8 @@ void    ch_load_champ(int fd, uint32_t id, bool assign)
     ch_parse_champ_header(&hdr, fd);
     CORE.nplayers++;
     champ = &(CORE.champions[index]);
-	memcpy(champ->name, hdr.prog_name, PROG_NAME_LENGTH);
+	bzero(champ, sizeof(t_champ));
+    memcpy(champ->name, hdr.prog_name, PROG_NAME_LENGTH);
 	memcpy(champ->comment, hdr.comment, COMMENT_LENGTH);
     champ->id = assign ? id : --aid;
     champ->prog_size = hdr.prog_size;

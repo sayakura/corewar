@@ -26,9 +26,21 @@ typedef struct s_cpu
 typedef struct s_process
 {
     t_cpu 				state;
-    int8_t      		champ_id;
+    int32_t      		champ_id;
 	struct s_process	*next;
 }               t_process;
+
+typedef struct		s_op
+{
+	char			*name;
+	int				argc;
+	t_arg_type		argvt[MAX_ARGS_NUMBER];
+	char			opcode;
+	uint32_t		cycles;
+	char			*des;
+	bool			coding_byte;
+	bool			truncate;
+}					t_op;
 
 typedef struct s_champ
 {
@@ -96,9 +108,10 @@ uint8_t         g_gram[MEM_SIZE];
 # define R15 g_cpu.registers[15]
 # define REG g_cpu.registers
 
-# define MDR g_cpu.mdr
-# define MAR g_cpu.mar
+// # define MDR g_cpu.mdr
+// # define MAR g_cpu.mar
 
+# define g_op_tab LOOKUP
 # define MEM g_ram
 # define MEM_END (MEM + MEM_SIZE)
 # define LOG printf
@@ -109,6 +122,9 @@ uint8_t         g_gram[MEM_SIZE];
 
 #define PERROR(msg) ({ perror(msg); exit(1); })
 
+
+extern t_op		g_op_tab[17];
+
 void    ch_load_champ(int fd, uint32_t id, bool assign);
 t_champ	*ch_search_champion(int32_t id);
 void    ch_champ_intro();
@@ -116,7 +132,7 @@ void    ch_champ_intro();
 void    h_rev_bytes(void *ptr, size_t n);
 
 void        p_fork(uint8_t *pc, int32_t id, bool before);
-
+void        p_process_loop();
 /*
 TODO:
 using acb as key to dispatch work to different handlers
