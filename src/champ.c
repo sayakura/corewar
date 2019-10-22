@@ -78,7 +78,7 @@ void    ch_load_champ(int fd, uint32_t id, bool assign)
     t_champ             *champ;
     static int32_t      index;
     static int32_t       aid;
-    uint8_t             *pc;
+    uint32_t            pc;
 
     ch_parse_champ_header(&hdr, fd);
     CORE.nplayers++;
@@ -90,8 +90,8 @@ void    ch_load_champ(int fd, uint32_t id, bool assign)
 	memcpy(champ->comment, hdr.comment, COMMENT_LENGTH);
     champ->id = assign ? id : --aid;
     champ->prog_size = hdr.prog_size;
-	pc = &MEM[(MEM_SIZE / CORE.nplayers) * index];
-	if (read(fd, pc, hdr.prog_size) != hdr.prog_size)
+	pc = (MEM_SIZE / CORE.nplayers) * index;
+	if (read(fd, &MEM[pc], hdr.prog_size) != hdr.prog_size)
 		PERROR("read");
     p_fork(pc, champ->id, true);
     index++;

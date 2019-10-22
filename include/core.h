@@ -15,11 +15,13 @@
 // #define MEM_SIZE (4*1024)
 // #define REG_NUMBER 16
 
+
 typedef struct s_cpu
 {
-    uint8_t		registers[REG_NUMBER + 1];
-    uint8_t		*pc;
+    int32_t		registers[REG_NUMBER + 1];
+    uint32_t	pc;
     uint32_t	rflags;
+	bool		write_back: 1;
     // uint8_t      *mar;
     // uint8_t      mdr[16];
 }               t_cpu;
@@ -91,6 +93,8 @@ t_cw			g_corewar;
 uint8_t			g_ram[MEM_SIZE];
 uint8_t         g_gram[MEM_SIZE];
 
+
+# define CPU_STATE g_cpu
 # define F_VERBOSE (1 << 31)
 
 # define R0 g_cpu.registers[0]
@@ -119,10 +123,12 @@ uint8_t         g_gram[MEM_SIZE];
 # define MEM_END (MEM + MEM_SIZE)
 # define LOG printf
 # define CORE g_corewar
-
+# define PC g_cpu.pc
 # define FATAL(msg) ({LOG(msg); exit(1);})
-
-
+# define PUSH 1
+# define POP 0
+# define PC_UPDATE(p, vp) (p = vp % MEM_SIZE) 
+# define WRITE_BACK(nreg, val_e) (REG[nreg] = val_e)
 #define PERROR(msg) ({ perror(msg); exit(1); })
 
 
@@ -134,7 +140,7 @@ void    ch_champ_intro();
 
 void    h_rev_bytes(void *ptr, size_t n);
 
-void        p_fork(uint8_t *pc, int32_t id, bool before);
+void        p_fork(uint32_t pc, int32_t id, bool before);
 void        p_process_loop();
 
 
@@ -143,7 +149,7 @@ void    cw_start();
 
 void	ft_putchar(char c);
 void	h_puthex(unsigned char c);
-
+void    i_instruction_cycle();
 /*
 TODO:
 using acb as key to dispatch work to different handlers

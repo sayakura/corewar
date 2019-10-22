@@ -53,7 +53,16 @@ void    cw_kill()
         else
             cur = cur->next;
     }
-    CORE.kill_cycle = CORE.cycle + CORE.cycle_to_die;
+    if (++CORE.checks >= MAX_CHECKS || CORE.nbr_live_called > NBR_LIVE)
+    {
+        if (CORE.cycle_to_die > CYCLE_DELTA)
+            CORE.cycle_to_die -= CYCLE_DELTA;
+        else
+            CORE.cycle_to_die = 0;
+        CORE.nbr_live_called = 0;
+        CORE.checks = 0;
+        CORE.kill_cycle = CORE.cycle + CORE.cycle_to_die;
+    }
 }
 
 void    cw_start()
@@ -74,15 +83,6 @@ void    cw_start()
         {
             printf("someone won at %d!\n", CORE.cycle);
             exit(0);
-        }
-        if (++CORE.checks >= MAX_CHECKS || CORE.nbr_live_called > NBR_LIVE)
-        {
-            if (CORE.cycle_to_die > CYCLE_DELTA)
-                CORE.cycle_to_die -= CYCLE_DELTA;
-            else
-                CORE.cycle_to_die = 0;
-            CORE.nbr_live_called = 0;
-            CORE.checks = 0;
         }
     }
 }
