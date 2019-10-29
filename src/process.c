@@ -31,8 +31,8 @@ void        p_fork(uint32_t pc, int32_t id, bool before)
 
     p = malloc(sizeof(t_process));
     bzero(p, sizeof(t_process));
-    p->state.registers[1] = id;
-    p->state.pc = pc;
+    p->state.registers.ureg[1] = id;
+    p->state.registers.ureg[PC] = pc;
     p->champ_id = id;
     p->next = NULL;
     CORE.nprocess++;

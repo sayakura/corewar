@@ -15,11 +15,27 @@
 // #define MEM_SIZE (4*1024)
 // #define REG_NUMBER 16
 
+typedef struct	s_reg
+{
+	int32_t		registers[REG_NUMBER + 1];
+	int32_t		pc; // + 1
+	int32_t		rdi; // + 2
+	int32_t		rsi; // + 3
+	int32_t		rcx; // + 4
+	int32_t		val_e; // + 5 
+	int32_t		val_p; // + 6 
+}				t_reg;
+
+typedef union u_reg
+{
+	t_reg	sreg;
+	int32_t	ureg[sizeof(t_reg) / sizeof(int32_t)];
+}				tu_reg;
 
 typedef struct s_cpu
 {
-    int32_t		registers[REG_NUMBER + 1];
-    uint32_t	pc;
+	tu_reg 		registers;
+	uint8_t		acb;
     uint32_t	rflags;
 	bool		write_back: 1;
     // uint8_t      *mar;
@@ -97,33 +113,41 @@ uint8_t         g_gram[MEM_SIZE];
 # define CPU_STATE g_cpu
 # define F_VERBOSE (1 << 31)
 
-# define R0 g_cpu.registers[0]
-# define R1 g_cpu.registers[1]
-# define R2 g_cpu.registers[2]
-# define R3 g_cpu.registers[3]
-# define R4 g_cpu.registers[4]
-# define R5 g_cpu.registers[5]
-# define R6 g_cpu.registers[6]
-# define R7 g_cpu.registers[7]
-# define R8 g_cpu.registers[8]
-# define R9 g_cpu.registers[9]
-# define R10 g_cpu.registers[10]
-# define R11 g_cpu.registers[11]
-# define R12 g_cpu.registers[12]
-# define R13 g_cpu.registers[13]
-# define R14 g_cpu.registers[14]
-# define R15 g_cpu.registers[15]
-# define REG g_cpu.registers
+# define PC_V g_cpu.registers.sreg.pc
+# define PC (REG_NUMBER + 1)
+# define RDI (REG_NUMBER + 2)
+# define RSI (REG_NUMBER + 3)
+# define RCX (REG_NUMBER + 4)
+# define VAL_E (REG_NUMBER + 5) 
+# define VAL_P (REG_NUMBER + 6) 
+# define ACB (g_cpu.acb)
+// shit these are bull shit
+# define R0 0
+# define R1 1
+# define R2 2
+# define R3 3
+# define R4 4
+# define R5 5
+# define R6 6
+# define R7 7
+# define R8 8
+# define R9 9
+# define R10 10
+# define R11 11
+# define R12 12
+# define R13 13
+# define R14 14
+# define R15 15
+# define REG g_cpu.registers.ureg
 
 // # define MDR g_cpu.mdr
 // # define MAR g_cpu.mar
 
-# define g_op_tab LOOKUP
+# define LOOKUP g_op_tab 
 # define MEM g_ram
 # define MEM_END (MEM + MEM_SIZE)
 # define LOG printf
 # define CORE g_corewar
-# define PC g_cpu.pc
 # define FATAL(msg) ({LOG(msg); exit(1);})
 # define PUSH 1
 # define POP 0
